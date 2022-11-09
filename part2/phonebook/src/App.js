@@ -1,17 +1,22 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
 import Filter from './Filter'
 import Persons from './Persons'
 import PersonForm from './PersonForm'
 
 function App() {
 
-  const [persons, setPersons] = useState([
-    {name: 'Arto Hellas', phone:'54321287'}
-  ])
-
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+
+  useEffect(()=>{
+    axios.get('http://localhost:3001/persons')
+    .then(response => {
+      setPersons(response.data)
+    })
+  },[])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -31,7 +36,7 @@ function App() {
       window.alert(`${newName} already in list`)
     else
     {
-      setPersons(persons.concat({name: newName, phone: newPhone}))
+      setPersons(persons.concat({name: newName, number: newPhone}))
       setNewName('')
       setNewPhone('')
     }
