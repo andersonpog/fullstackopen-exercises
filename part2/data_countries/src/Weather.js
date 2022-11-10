@@ -8,8 +8,9 @@ const Weather = ({lat, lng}) => {
     const [wind, setWind] = useState(0)
 
     useEffect (()=>{
+        console.log(process.env)
         axios
-        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=5773397bdfa74702fcd51482151ef150`)
+        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`)
         .then(response => {
             setTemperature(response.data.main.temp)
             setIconCode(response.data.weather[0].icon)
