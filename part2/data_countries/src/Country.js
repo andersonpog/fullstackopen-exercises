@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Weather from "./Weather";
 
 const Country = ({country,show}) => {
     
@@ -19,6 +20,8 @@ const Country = ({country,show}) => {
             {Object.values(country.languages).map( lang => <li key={lang} >{lang}</li> )}
         </ul>
         <img src={country.flags.png} alt="flag"/>
+        <h2>Weather in {country.capital}</h2>
+        <Weather lat={country.capitalInfo.latlng[0]} lng={country.capitalInfo.latlng[1]} />
         <div>
         <button onClick={handleClick} >hide</button>
         </div>

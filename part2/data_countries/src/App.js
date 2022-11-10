@@ -6,7 +6,6 @@ function App() {
 
   const [countries, setCountries] = useState([])
   const [countryFilter, setCountryFilter] = useState('')
-  // const [countriesToShow, setCountriesToShow] = useState([])
 
   useEffect (() => {
     axios
@@ -16,17 +15,13 @@ function App() {
     })
   },[])
 
-  // useEffect( () => {
-  //   setCountriesToShow(countryFilter ? countries.filter(country => country.name.common.toLowerCase().includes(countryFilter.toLowerCase())) : [])
-  // },[countryFilter, countries])
 
   const handleCountryFilterChange = (event) => {
     setCountryFilter(event.target.value)
   }
 
   const countriesToShow = countryFilter ? countries.filter(country => country.name.common.toLowerCase().includes(countryFilter.toLowerCase())) : []
-  // console.log(countriesToShow)
-  // countriesToShow.length>10 ? console.log("tem muito") : console.log("ai sim")
+
   return (
     <>
       find countries: <input
