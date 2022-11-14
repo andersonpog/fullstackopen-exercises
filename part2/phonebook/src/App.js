@@ -1,8 +1,11 @@
 import {useEffect, useState} from 'react'
 import axios from 'axios'
-import Filter from './Filter'
-import Persons from './Persons'
-import PersonForm from './PersonForm'
+
+import Filter from './components/Filter'
+import Persons from './components/Persons'
+import PersonForm from './components/PersonForm'
+
+import personService from './services/persons'
 
 function App() {
 
@@ -12,10 +15,9 @@ function App() {
   const [nameFilter, setNameFilter] = useState('')
 
   useEffect(()=>{
-    axios.get('http://localhost:3001/persons')
-    .then(response => {
-      setPersons(response.data)
-    })
+    personService
+    .getAll()
+    .then(response => setPersons(response))
   },[])
 
   const handleNameChange = (event) => {
@@ -30,15 +32,32 @@ function App() {
     setNameFilter(event.target.value)
   }
 
+  const handleDelete = (event) => {
+    if(window.confirm(`delete ${persons.find(person => person.id===parseInt(event.target.value)).name}?`))
+    personService
+    .remove(event.target.value)
+    .then( ()=> setPersons(persons.filter(person => person.id!==parseInt(event.target.value))))
+  }
+
   const addName = (event) => {
     event.preventDefault()
     if(persons.some( person => person.name === newName ))
-      window.alert(`${newName} already in list`)
+    {
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`))
+      {
+        personService.update(persons.find(person => person.name===newName).id, {name: newName, number: newPhone})
+        .then(response => setPersons(persons.map(person => person.id!==parseInt(response.id) ? person : response)))
+      }
+    }
     else
     {
-      setPersons(persons.concat({name: newName, number: newPhone}))
-      setNewName('')
-      setNewPhone('')
+      personService
+      .create({name: newName, number: newPhone})
+      .then(response=> {
+        setPersons(persons.concat(response))
+        setNewName('')
+        setNewPhone('')
+      })
     }
   }
 
@@ -57,7 +76,7 @@ function App() {
         handlePhoneChange={handlePhoneChange} 
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
     </div>
   )
 }
