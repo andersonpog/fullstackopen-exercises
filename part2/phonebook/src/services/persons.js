@@ -21,8 +21,9 @@ const update = (id, newPerson) => {
 
 const remove = (id) => {
     return axios
-    .delete(`${baseUrl}//${id}`)
-    .then(response => response.data)
+    .delete(`${baseUrl}/${id}`)
+    .then(response => response.status)
+    .catch(error => error.response.status)
 }
 
 export default {getAll, create, update, remove}

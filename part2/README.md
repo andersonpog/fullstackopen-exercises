@@ -10,4 +10,4 @@ data_countries need a .env.local file with the content
 
 REACT_APP_OPENWEATHER_API_KEY=key_from_open_weather
 
-2.15-2.18 are in folder phonebook
+2.15-2.20 are in folder phonebook
